@@ -1,0 +1,66 @@
+   <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <body>
+        <meta charset="UTF-8">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> Bot Carlos Pellicer</title>
+        <h2>Bot Carlos Pellicer</h2>
+        <input type="file" id="fileInput" />
+        <button onclick="mezclar()">Mezclar</button>
+        
+        <p id="output"></p>
+        
+        <script>
+            let fileContent = '';
+
+// Lee el archivo seleccionado
+document.getElementById('fileInput').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        fileContent = e.target.result;
+    };
+    
+    reader.readAsText(file);
+});
+
+// Función para randomizar las palabras y crear la estructura de poema
+function mezclar() {
+    if (!fileContent) {
+        document.getElementById('output').innerText = 'Please select a file first.';
+        return;
+    }
+
+    // Divide el contenido en palabras
+    let words = fileContent.split(/\s+/);
+
+    // Algoritmo Fisher-Yates para mezclar las palabras
+    for (let i = words.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [words[i], words[j]] = [words[j], words[i]];
+    }
+
+    let poem = '';
+    let line = [];
+
+    // Agrupa las palabras en líneas de máximo 8 palabras
+    words.forEach((word, index) => {
+        line.push(word);
+        if ((index + 1) % 8 === 0 || index === words.length - 1) {
+            poem += line.join(' ') + '<br>';
+            line = [];
+        }
+    });
+
+    // Mostrar el poema en la página
+    document.getElementById('output').innerHTML = poem;
+}
+        </script>
+        
+        
+        
+    </body>
+    </html>
